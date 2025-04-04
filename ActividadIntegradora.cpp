@@ -6,6 +6,29 @@
 
 using namespace std;
 
+// Función para leer el contenido completo de un archivo
+string readFileContent(const string& fileName) {
+    ifstream file(fileName);
+    if (!file.is_open()) {
+        cerr << "Error al abrir el archivo: " << fileName << endl;
+        return "";
+    }
+
+    string content;
+    string line;
+    while (getline(file, line)) {
+        content += line + "\n";
+    }
+    file.close();
+
+    // Eliminar el último salto de línea si existe
+    if (!content.empty() && content.back() == '\n') {
+        content.pop_back();
+    }
+
+    return content;
+}
+
 // Función para construir la tabla LPS (Longest Prefix Suffix)
 vector<int> computeLPS(const string& pattern) {
     int m = pattern.length();
@@ -62,22 +85,7 @@ int kmpSearch(const string& text, const string& pattern) {
 
 // Función para leer el texto del archivo y buscar el patrón
 int searchPatternInFile(const string& fileName, const string& pattern) {
-    ifstream file(fileName);
-    if (!file.is_open()) {
-        cerr << "Error al abrir el archivo: " << fileName << endl;
-        return -1;
-    }
-
-    string line;
-    string fullText;
-
-    // Leer todo el contenido del archivo en una sola cadena
-    while (getline(file, line)) {
-        fullText += line + "\n";  // Conservar saltos de línea
-    }
-    file.close();
-
-    // Buscar el patrón en el texto completo
+    string fullText = readFileContent(fileName);
     return kmpSearch(fullText, pattern);
 }
 
@@ -176,29 +184,6 @@ pair<int, int> findLongestCommonSubstring(const string& text1, const string& tex
 
     int startIndex = endIndex - maxLength + 1;
     return {startIndex + 1, endIndex + 1}; // +1 para posiciones basadas en 1
-}
-
-// Función para leer el contenido completo de un archivo
-string readFileContent(const string& fileName) {
-    ifstream file(fileName);
-    if (!file.is_open()) {
-        cerr << "Error al abrir el archivo: " << fileName << endl;
-        return "";
-    }
-
-    string content;
-    string line;
-    while (getline(file, line)) {
-        content += line + "\n";
-    }
-    file.close();
-
-    // Eliminar el último salto de línea si existe
-    if (!content.empty() && content.back() == '\n') {
-        content.pop_back();
-    }
-
-    return content;
 }
 
 int main() {
