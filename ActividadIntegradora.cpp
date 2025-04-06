@@ -83,11 +83,6 @@ int kmpSearch(const string& text, const string& pattern) {
     return -1;  // Patrón no encontrado
 }
 
-// Función para leer el texto del archivo y buscar el patrón
-int searchPatternInFile(const string& fileName, const string& pattern) {
-    string fullText = readFileContent(fileName);
-    return kmpSearch(fullText, pattern);
-}
 
 pair<int, int> longestPalindrome(const string& s) {
     if (s.empty()) return {0, 0};
@@ -194,9 +189,10 @@ int main() {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 3; j++) {
             string pattern = readFileContent(patterns[j]);
+            string file = readFileContent(files[i]);
             if (pattern.empty()) continue;
 
-            int index = searchPatternInFile(files[i], pattern);
+            int index = kmpSearch(file, pattern);
             if (index != -1) {
                 cout << "true " << index << endl;
             } else {
